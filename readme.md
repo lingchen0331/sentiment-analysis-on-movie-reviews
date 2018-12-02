@@ -1,4 +1,7 @@
 # Sentiment Analysis on Movie Reviews
+University of Delaware   
+CISC 882 Natural Language Proccessing   
+Final Project  
 ## Background
 Sentiment Analysis is also known as ​ Opinion Mining ​ is a field within Natural Language Processing
 (NLP) that builds systems that try to identify and extract opinions within the text​ (Bo and Lillian, 2008). Currently, sentiment analysis has become a topic with great interests and developments since it has many practical applications, including social media monitoring, marketing analysis,
