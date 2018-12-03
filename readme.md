@@ -28,3 +28,7 @@ Totally, we have tried three feature extraction methods: *bag of words*, *TF-iDF
 > A bag of words model is the most straigntforward way to represent text in NLP. In this model, a text (such as a sentence or a document) is represented as the bag (multiset) of its words, disregarding grammar and even word order but keeping multiplicity.  
 
 
+> **TF-iDF (Term Frequency–inverse Document Frequency)**  
+> Tf-iDF is widely used in the area of information retrieval, which is a numerical statistic that is intended to reflect how important a word is to a document in a collection or corpus.  
+
+
