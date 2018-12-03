@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Author: chen
-# Created at: 12/2/18 6:10 PM
+# Created at: 12/3/18 1:30 PM
+
 __author__ = 'ChenLing'
 
 import data_helpers as dh
@@ -42,47 +43,5 @@ num_labels = len(labels)
 y_train = to_categorical(y_train.map(lambda x: le.transform([x])[0]), num_labels)
 y_test = to_categorical(y_test.map(lambda x: le.transform([x])[0]), num_labels)
 
-# take tokens and build word-id dictionary     
-tokenizer = Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n',lower=True,split=" ")
-tokenizer.fit_on_texts(sentence)
-vocab = tokenizer.word_index
 
-# Match the input format of the model
-x_train_word_ids = tokenizer.texts_to_sequences(X_train)
-x_test_word_ids = tokenizer.texts_to_sequences(X_test)
-x_train_padded_seqs = pad_sequences(x_train_word_ids, maxlen=20)
-x_test_padded_seqs = pad_sequences(x_test_word_ids, maxlen=20)
-
-
-# Bi-LSTM model
-model = Sequential()
-
-model.add(Embedding(len(vocab)+1, 256, input_length=20))
-
-model.add(LSTM(
-        256, 
-        dropout=0.2, 
-        recurrent_dropout=0.1, 
-        return_sequences=True))
-
-model.add(LSTM(
-        256, 
-        dropout=0.2, 
-        recurrent_dropout=0.1))
-
-# Add asoftmax activation function
-model.add(Dense(num_labels, activation='softmax'))
-
-model.compile(loss='categorical_crossentropy',
-              optimizer='adam',
-              metrics=['accuracy'])
-
-# We fit the padded training data into our model
-model.fit(x_train_padded_seqs, y_train,
-          batch_size=128,
-          epochs=8,
-          validation_data=(x_test_padded_seqs, y_test))
-
-
-# We use accuracy to do the evaluation metrics
-score, acc = model.evaluate(x_test_padded_seqs, y_test, batch_size=128)
+embedding_matrix = dh.load_word_embedding('data/glove.6B.300d.txt', sentence)

@@ -6,6 +6,10 @@ from nltk.tokenize import word_tokenize
 import glob
 import json
 import pandas as pd
+import numpy as np
+import os
+
+from keras.preprocessing.text import Tokenizer
 
 
 stop_words = set(stopwords.words('english'))
@@ -67,6 +71,13 @@ def list_to_txt(endpath):
     
     
 def load_json(filename):
+    """
+    Load json files in a given directory
+    Args:
+        filename: The given file path with its file name
+    Returns:
+        The pandas dataframe format nd-array
+    """
     data = []
     with open(filename) as f:
         for line in f:
@@ -74,4 +85,41 @@ def load_json(filename):
 
     data = pd.DataFrame(data)
     return data
+
+    
+def load_word_embedding(model_DIR, texts):
+    """
+    Use Pre-trained Word Embedding Model - GloVe
+    (6B tokens, 400K vocab, 300 dimensions vector)
+    Jeffrey Pennington, Richard Socher, and Christopher D. Manning. 2014. GloVe: Global Vectors for Word Representation.
+
+    Args:
+    model_DIR: The given file path with the model name
+    texts: Total texts
+    Returns:
+        The pandas dataframe format nd-array
+    """
+    # load glove word embedding data
+    embeddings_index = {}
+    f = open(os.path.join(model_DIR), encoding='utf-8')
+    for line in f:
+        values = line.split()
+        word = values[0]
+        coefs = np.asarray(values[1:], dtype='float32')
+        embeddings_index[word] = coefs
+    f.close()
+
+    # take tokens and build word-id dictionary
+    tokenizer = Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ")
+    tokenizer.fit_on_texts(texts)
+    vocab = tokenizer.word_index
+
+    # Match the word vector for each word in the data set from Glove
+    embedding_matrix = np.zeros((len(vocab) + 1, 300))
+    for word, i in vocab.items():
+        embedding_vector = embeddings_index.get(word)
+        if embedding_vector is not None:
+            embedding_matrix[i] = embedding_vector
+
+    return embedding_matrix
 
