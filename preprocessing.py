@@ -27,15 +27,18 @@ Uncomment the following block for data preprocessing
 
 
 test_data = dh.load_json('data/test.json')
-train_data = dh.load_json('data/train.json')
+train_data = dh.load_json('data/Train.json')
 
 
 
+X_train = list(train_data['features_content'])
+X_test = list(test_data['features_content'])
 
+y_train = list(train_data['labels_index'])
+y_test = list(test_data['labels_index'])
 
-
-
-
+features = X_train + X_test
+labels = y_train + y_test
 
 
 

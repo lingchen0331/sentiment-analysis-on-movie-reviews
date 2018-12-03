@@ -19,6 +19,12 @@ The first part of the project is data-preprocessing. Since the original dataset 
 Noise Removal (Remove stop words)   
 Lemmaziation & Normalization
 
-Besides, for the purpose of contrast with traditional NLP classification methods, it is also essential tovectorize phrases (TF-IDF, Word Embedding) in order to learn the correlation between texts rather than treating words as discrete symbols like the *bag of words* model.
+Besides, for the purpose of contrast with traditional NLP classification methods, it is also essential to vectorize phrases (TF-IDF, Word Embedding) in order to learn the correlation between texts rather than treating words as discrete symbols like the *bag of words* model.
 
-After integrating the dataset, we have 29379, 22627, 22988 and 25995 samples for each of our four classes. We split our dataset into training set and testing set in the ratio of 4 to 1. 
+After integrating the dataset, we have 29379, 22627, 22988 and 25995 samples for each of our four classes. We split our dataset into the training set and testing set in the ratio of 4 to 1. 
+
+Totally, we have tried three feature extraction methods: *bag of words*, *TF-iDF* and *Word Embedding*. We will introduce these three methods here briefly.  
+> **Bag of Words**  
+> A bag of words model is the most straigntforward way to represent text in NLP. In this model, a text (such as a sentence or a document) is represented as the bag (multiset) of its words, disregarding grammar and even word order but keeping multiplicity.  
+
+

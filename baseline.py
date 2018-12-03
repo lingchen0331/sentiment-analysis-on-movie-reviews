@@ -4,8 +4,9 @@
 
 import data_helpers as dh
 
-train_data = dh.load_json('data/Train.json')
-test_data = dh.load_json('data/Validation.json')
+#train_data = dh.load_json('data/Train.json')
+#test_data = dh.load_json('data/Validation.json')
+total_data = dh.load_json('data/Total.json')
 
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
@@ -28,8 +29,8 @@ svm = SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, max_iter=5, random_s
 mnb_pipeline = make_pipeline(vect, mnb)
 svm_pipeline = make_pipeline(vect, svm)
 
-sentence = train_data.features_content.astype(str)
-label = train_data.labels_index.astype(str)
+sentence = total_data.features_content.astype(str)
+label = total_data.labels_index.astype(str)
 
 
 mnb_cv = cross_val_score(mnb_pipeline, sentence, label, scoring='accuracy', cv=10, n_jobs=-1)
