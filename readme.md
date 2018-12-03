@@ -29,8 +29,7 @@ Totally, we have tried three feature extraction methods: *bag of words*, *TF-iDF
 
 
 > **TF-iDF (Term Frequency–inverse Document Frequency)**  
-> Tf-iDF is widely used in the area of information retrieval, which is a numerical statistic that is intended to reflect how important a word is to a document in a collection or corpus.    
+> Tf-iDF is widely used in the area of information retrieval, which is a numerical statistic that is intended to reflect how important a word is to a document in a collection or corpus. The tf–idf value increases proportionally to the number of times a word appears in the document and is offset by the number of documents in the corpus that contain the word, which helps to adjust for the fact that some words appear more frequently in general. Tf–idf is one of the most popular term-weighting schemes today.   
   *Term Frequency* is the simplest choice to use the raw count of a term in a document, like the occurrence of a word in a document.   
-  
   *Inverse Document Frequency* is a measure of how much information the word provides, i.e., if it's common or rare across all documents.
 
