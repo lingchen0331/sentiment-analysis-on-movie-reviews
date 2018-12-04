@@ -28,6 +28,8 @@
 idea/
 aclImdb/
 data/
+logs/
+model/
 
 # OS generated files #
 ######################

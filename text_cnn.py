@@ -45,3 +45,12 @@ y_test = to_categorical(y_test.map(lambda x: le.transform([x])[0]), num_labels)
 
 
 embedding_matrix = dh.load_word_embedding('data/glove.6B.300d.txt', sentence)
+
+
+embedding_layer = Embedding(len(sentence) + 1,
+                            300,
+                            weights=[embedding_matrix],
+                            input_length=MAX_SEQUENCE_LENGTH,
+                            trainable=False)
+
+

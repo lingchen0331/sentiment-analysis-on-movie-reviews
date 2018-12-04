@@ -87,15 +87,15 @@ def load_json(filename):
     return data
 
     
-def load_word_embedding(model_DIR, texts):
+def load_word_embedding(model_DIR, TEXT):
     """
     Use Pre-trained Word Embedding Model - GloVe
     (6B tokens, 400K vocab, 300 dimensions vector)
     Jeffrey Pennington, Richard Socher, and Christopher D. Manning. 2014. GloVe: Global Vectors for Word Representation.
 
     Args:
-    model_DIR: The given file path with the model name
-    texts: Total texts
+        model_DIR: The given file path with the model name
+        TEXT: Total texts
     Returns:
         The pandas dataframe format nd-array
     """
@@ -111,7 +111,7 @@ def load_word_embedding(model_DIR, texts):
 
     # take tokens and build word-id dictionary
     tokenizer = Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ")
-    tokenizer.fit_on_texts(texts)
+    tokenizer.fit_on_texts(TEXT)
     vocab = tokenizer.word_index
 
     # Match the word vector for each word in the data set from Glove

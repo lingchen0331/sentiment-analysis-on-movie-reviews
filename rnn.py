@@ -16,6 +16,7 @@ total_data = dh.load_json('data/Total.json')
 sentence = total_data.features_content.astype(str)
 label = total_data.labels_index.astype(str)
 
+from keras.utils import plot_model
 from keras.utils.np_utils import to_categorical
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
@@ -23,6 +24,8 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, Embedding, Activation, merge, Input, Lambda, Reshape
 from keras.layers import Convolution1D, Flatten, Dropout, MaxPool1D, GlobalAveragePooling1D
 from keras.layers import LSTM, GRU, TimeDistributed, Bidirectional
+from keras.callbacks import Callback
+from keras.callbacks import TensorBoard
 
 from sklearn import preprocessing
 from sklearn.metrics import precision_score, recall_score, f1_score
@@ -73,16 +76,28 @@ model.add(LSTM(
 # Add asoftmax activation function
 model.add(Dense(num_labels, activation='softmax'))
 
+plot_model(model, to_file='model/rnn.png')
+
 model.compile(loss='categorical_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
+tb = TensorBoard(log_dir='./logs',
+                 histogram_freq=1,
+                 batch_size=64,
+                 write_graph=True,
+                 write_grads=False,
+                 write_images=False,
+                 embeddings_freq=0,
+                 embeddings_layer_names=None,
+                 embeddings_metadata=None)
+
 # We fit the padded training data into our model
-model.fit(x_train_padded_seqs, y_train,
-          batch_size=128,
+model.fit(x_train_padded_seqs,
+          y_train,batch_size=64,
           epochs=8,
+          callbacks=[tb],
           validation_data=(x_test_padded_seqs, y_test))
 
-
 # We use accuracy to do the evaluation metrics
-score, acc = model.evaluate(x_test_padded_seqs, y_test, batch_size=128)
+score, acc = model.evaluate(x_test_padded_seqs, y_test, batch_size=64)
