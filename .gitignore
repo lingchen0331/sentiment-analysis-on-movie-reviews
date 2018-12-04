@@ -44,3 +44,5 @@ venv/
 
 .gitignore
 best.weight
+__pycache__/
+ven/
