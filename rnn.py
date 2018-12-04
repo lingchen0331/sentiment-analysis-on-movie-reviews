@@ -57,7 +57,7 @@ x_train_padded_seqs = pad_sequences(x_train_word_ids, maxlen=20)
 x_test_padded_seqs = pad_sequences(x_test_word_ids, maxlen=20)
 
 
-# Bi-LSTM model
+# LSTM model
 model = Sequential()
 
 model.add(Embedding(len(vocab)+1, 256, input_length=20))

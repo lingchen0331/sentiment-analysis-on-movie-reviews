@@ -87,7 +87,7 @@ def load_json(filename):
     return data
 
     
-def load_word_embedding(model_DIR, TEXT):
+def load_word_embedding(model_DIR, TEXT, MAX_NUM_WORDS):
     """
     Use Pre-trained Word Embedding Model - GloVe
     (6B tokens, 400K vocab, 300 dimensions vector)
@@ -96,6 +96,7 @@ def load_word_embedding(model_DIR, TEXT):
     Args:
         model_DIR: The given file path with the model name
         TEXT: Total texts
+        MAX_NUM_WORDS: The max mumber of words
     Returns:
         The pandas dataframe format nd-array
     """
@@ -110,7 +111,7 @@ def load_word_embedding(model_DIR, TEXT):
     f.close()
 
     # take tokens and build word-id dictionary
-    tokenizer = Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ")
+    tokenizer = Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ", num_words=20000)
     tokenizer.fit_on_texts(TEXT)
     vocab = tokenizer.word_index
 
