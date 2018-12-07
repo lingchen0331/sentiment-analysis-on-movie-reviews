@@ -53,7 +53,7 @@ y_train = to_categorical(y_train.map(lambda x: le.transform([x])[0]), num_labels
 y_test = to_categorical(y_test.map(lambda x: le.transform([x])[0]), num_labels)
 
 # take tokens and build word-id dictionary     
-tokenizer = Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n',lower=True,split=" ")
+tokenizer = Tokenizer(filters='"#$%&()*+,-.:;<=>@[\\]^_`{|}~\t\n', lower=True, split=" ")
 tokenizer.fit_on_texts(sentence)
 vocab = tokenizer.word_index
 

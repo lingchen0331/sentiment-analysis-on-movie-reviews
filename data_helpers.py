@@ -55,6 +55,17 @@ def write_list_to_txt(lists, path):
             f.write("%s\n" % item)
 
 
+def write_list_to_json(file_path, entities, values):
+    json_dict = []
+    for i in values:
+        json_dict.append(dict(zip(entities, i)))
+
+    with open(file_path+'.json', 'a', encoding='utf8') as file:
+        for i in json_dict:
+            json.dump(i, file)
+            file.write('\n')
+
+
 def list_to_txt(endpath):
     with open('result_test.txt', encoding='utf-8') as f:
         data = f.readlines()
@@ -123,4 +134,5 @@ def load_word_embedding(model_DIR, TEXT, MAX_NUM_WORDS):
             embedding_matrix[i] = embedding_vector
 
     return embedding_matrix
+
 

@@ -16,15 +16,13 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import cross_val_score
 
 # Tf-iDF Baseline model
-vect = TfidfVectorizer(stop_words='english', 
-                       token_pattern=r'\b\w{2,}\b',
-                       min_df=1, 
-                       max_df=0.1, 
+vect = TfidfVectorizer(min_df=1,
+                       max_df=0.1,
                        ngram_range=(1, 2))
 
 mnb = MultinomialNB(alpha=2)
 svm = SGDClassifier(loss='perceptron', penalty='l2', alpha=1e-3, max_iter=5, random_state=42)
-svc = LinearSVC(kernel='', loss='squared_hinge', multi_class='crammer_singer', max_iter=5, random_state=42)
+svc = LinearSVC(loss='squared_hinge', multi_class='crammer_singer', max_iter=5, random_state=42)
 mnb_pipeline = make_pipeline(vect, mnb)
 svm_pipeline = make_pipeline(vect, svm)
 svc_pipeline = make_pipeline(vect, svc)
@@ -40,4 +38,11 @@ svc_cv = cross_val_score(svc_pipeline, sentence, label, scoring='f1_macro', cv=1
 #print('\nMultinomialNB Classifier\'s Accuracy: %0.5f\n' % mnb_cv.mean())
 print('\nSVM Classifier\'s F1: %0.5f\n' % svm_cv.mean())
 print('\nSVC Classifier\'s Accuracy: %0.5f\n' % svc_cv.mean())
+
+
+
+
+
+
+
 
