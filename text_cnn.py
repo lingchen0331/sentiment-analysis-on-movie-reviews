@@ -5,17 +5,15 @@
 __author__ = 'ChenLing'
 
 import data_helpers as dh
-
-import os
 import numpy as np
 
 train_data = dh.load_json('data/Train.json')
-test_data = dh.load_json('data/Validation.json')
+test_data = dh.load_json('data/Test.json')
 total_data = dh.load_json('data/Total.json')
 
 # Parameters
 MAX_NUM_WORDS = 20000
-MAX_SEQUENCE_LENGTH = 100
+MAX_SEQUENCE_LENGTH = 200
 EMBEDDING_DIM = 300
 BATCH_SIZE = 32
 NUM_EPOCH = 12
@@ -34,6 +32,7 @@ from keras.layers import Convolution1D, Flatten, Dropout, MaxPool1D, GlobalAvera
 from keras.layers import LSTM, GRU, TimeDistributed, Bidirectional
 from keras.layers.merge import concatenate
 from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.initializers import Constant
 
 from sklearn import preprocessing
 
@@ -53,7 +52,7 @@ y_train = to_categorical(y_train.map(lambda x: le.transform([x])[0]), num_labels
 y_test = to_categorical(y_test.map(lambda x: le.transform([x])[0]), num_labels)
 
 # take tokens and build word-id dictionary     
-tokenizer = Tokenizer(filters='"#$%&()*+,-.:;<=>@[\\]^_`{|}~\t\n', lower=True, split=" ")
+tokenizer = Tokenizer(filters='"#$%&()*+,-.:;<=>@[\\]^_`{|}~\t\n', split=" ")
 tokenizer.fit_on_texts(sentence)
 vocab = tokenizer.word_index
 
@@ -68,10 +67,12 @@ print('Preparing embedding matrix...')
 # Load word-embedding matrix weight
 embedding_matrix = dh.load_word_embedding('data/glove.6B.300d.txt', sentence, MAX_NUM_WORDS)
 
-# Setting up embedding layer
-embedding_layer = Embedding(embedding_matrix.shape[0],
+# load pre-trained word embeddings into an Embedding layer
+# note that we set trainable = False so as to keep the embeddings fixed
+embedding_layer = Embedding(len(vocab) + 1,
                             EMBEDDING_DIM,
-                            weights=[embedding_matrix],
+                            embeddings_initializer=Constant(embedding_matrix),
+                            #weights=[embedding_matrix],
                             input_length=MAX_SEQUENCE_LENGTH,
                             trainable=False)
 

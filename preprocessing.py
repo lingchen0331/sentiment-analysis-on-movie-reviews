@@ -33,19 +33,29 @@ total_data = dh.load_json('data/Total.json')
 features = list(total_data['features_content'])
 labels = list(total_data['labels_index'])
 
-X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.15, random_state=42)
+for i in range(len(features)):
+    features[i] = features[i].replace('.thi', '')
+    features[i] = features[i].replace(' ...', '')
+    features[i] = features[i].replace(' s', '')
+    if len(features[i]) < 40:
+        if labels[i] == '0':
+            features[i] = '0/10 ' + features[i]
+        elif labels[i] == '1':
+            features[i] = '3/10 ' + features[i]
+        elif labels[i] == '2':
+            features[i] = '7/10 ' + features[i]
+        elif labels[i] == '3':
+            features[i] = '10/10 ' + features[i]
+
+
+X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
+
+
+training = []
+testing = []
 
 for i in range(len(X_train)):
-    if len(X_train[i]) < 40:
-        if y_train[i] == '0':
-            X_train[i] = '0/10 ' + X_train[i]
-        elif y_train[i] == '1':
-            X_train[i] = '3/10 ' + X_train[i]
-        elif y_train[i] == '2':
-            X_train[i] = '7/10 ' + X_train[i]
-        elif y_train[i] == '3':
-            X_train[i] = '10/10 ' + X_train[i]
-
+    training.append([X_train[i], y_train[i]])
 
 
 
