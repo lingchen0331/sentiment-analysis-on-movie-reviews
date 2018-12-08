@@ -6,12 +6,10 @@ Final Project
 Sentiment Analysis is also known as ​Opinion Mining​ is a field within Natural Language Processing (NLP) that builds systems that try to identify and extract opinions within the text​ (Bo and Lillian, 2008). Currently, sentiment analysis has become a topic with great interests and developments since it has many practical applications, including social media monitoring, marketing analysis, customer service, and product analytics. With the advantage of growing data size in most areas, a large number of texts expressing opinions and attitudes are available in review sites, blogs, and social media.
 
 ## Project Details
-The objective of this project is to apply different machine learning and deep learning methods in the task of sentiment analysis of movie reviews. Specifically, there are multiple movie review websites such as Rotten Tomatoes, IMDB, and Flixster, where users can rate based on their own
-feelings. Our sentiment analysis project aims at using raw movie review text with associated labels from IMDB to classify phrases on a scale of five classes: negative, somewhat negative, somewhat positive, positive (We use numerical value 0, 1, 2, 3 to represent them respectively). The challenging part of the task is dealing with obstacles like sentence
-negation, abbreviation, language ambiguity, and metaphors.
+The objective of this project is to apply different machine learning and deep learning methods in the task of sentiment analysis of movie reviews. Specifically, there are multiple movie review websites such as Rotten Tomatoes, IMDB, and Flixster, where users can rate based on their own feelings. Our sentiment analysis project aims at using raw movie review text with associated labels from IMDB to classify phrases on a scale of five classes: negative, somewhat negative, somewhat positive, positive (We use numerical value 0, 1, 2, 3 to represent them respectively). The challenging part of the task is dealing with obstacles like sentence negation, abbreviation, language ambiguity, and metaphors.
 
 ### Data Preprocessing
-The first part of the project is data-preprocessing. Since the original dataset contains only raw text with its label, we need to transform the shape of natural language and remove noises in order to better fit our model. Therefore, the data preprocessing contains the following steps:
+The first part of the project is data-preprocessing. Since the original dataset contains only raw text with its label, we need to transform the shape of natural language and remove noises in order to better fit our model. Therefore, the data preprocessing part contains the following steps:
 
 > Tokenization & Segmentation  
 Noise Removal (Remove stop words)   
@@ -28,10 +26,15 @@ Specifically, Tokenizers divide strings into lists of substrings. For example, t
 #### Noise Removal
 Once we have parsed the text from our movie review dataset, the challenge is to make sense of this raw data. Text cleansing is loosely used for most of the cleaning to be done on text, depending on the data source, parsing performance, external noise and so on.   
 
-Since there is no existing package to effectively remove stop words from a sentence, we have to design specific pattern to clean our data for our task. For example, a single word 'a' is normally treated as a stop word in NLTK's stop word's list, but in our movie reviews, people usually give comments like this: 'I would give this movie a big A'. The lower case 'a' can be removed because it's trival in sentiment analysis, but the upper case 'A' is really important in our sentiment analysis task. Therefore, we designed multiple regular expressions to extract useful information and effectively remove irrelavent stop words.  
+Since there is no existing package to effectively remove stop words from a sentence, we have to design specific pattern to clean our data for our task. For example, a single word 'a' is normally treated as a stop word in NLTK's stop word's list, but in our movie reviews, people usually give comments like this:   
+>'I would give this movie a big A'   
+
+The lower case 'a' can be removed because it's trival in sentiment analysis, but the upper case 'A' is really important in our sentiment analysis task. Besides, the encoding format of characters in moview reviews is inconsistent. It's often to see ‘ instead of ' in data sample. 
+
+Therefore, we designed multiple regular expressions to extract useful information and effectively remove irrelavent stop words.  
 
 #### Feature Selection
-Totally, we have tried three feature extraction methods: *bag of words*, *TF-iDF* and *Word Embedding*. We will introduce these three methods here briefly.  
+Feature selection plays an really important role in machine learning and natural language processing, which serves two main purposes. First, it makes training and applying a classifier more efficient by decreasing the size of the effective vocabulary. Secondly, feature selection often increases classification accuracy by eliminating noise features. In this task, we have tried three feature extraction methods: *bag of words*, *TF-iDF* and *Word Embedding*. We will introduce these three methods here briefly.  
 > **Bag of Words**  
 > A bag of words model is the most straigntforward way to represent text in NLP. In this model, a text (such as a sentence or a document) is represented as the bag (multiset) of its words, disregarding grammar and even word order but keeping multiplicity.    
        
@@ -41,7 +44,7 @@ Totally, we have tried three feature extraction methods: *bag of words*, *TF-iDF
 
 > **Word Embedding**  
 > *Word Embedding* is currently one of the most popular representation of document vocabulary. A Word Embedding format generally tries to map a word using a dictionary to a vector. [Word2vec](https://en.wikipedia.org/wiki/Word2vec) is a greatly example of using Word Embedding, which is a two-layer neural net that processes text. Its input is a text corpus and its output is a set of vectors: feature vectors for words in that corpus. While Word2vec is not a deep neural network, it turns text into a numerical form that deep nets can understand.   
-> In this task, I mainly used pre-trained [word vector](https://nlp.stanford.edu/projects/glove/) (6B tokens, 400K vocab) from Stanford GloVe. English Gigaword and Wikipedia 2014.   
+> In this task, I mainly used pre-trained [word vector](https://nlp.stanford.edu/projects/glove/) (6B tokens, 400K vocab) from Stanford GloVe, which is mainly trained on English Gigaword and Wikipedia 2014.    
 
 ## Models
 
