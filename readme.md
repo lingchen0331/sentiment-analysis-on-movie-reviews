@@ -47,10 +47,23 @@ Feature selection plays an really important role in machine learning and natural
 > In this task, I mainly used pre-trained [word vector](https://nlp.stanford.edu/projects/glove/) (6B tokens, 400K vocab) from Stanford GloVe, which is mainly trained on English Gigaword and Wikipedia 2014.    
 
 ## Models
+### Machine Learning Model
 
+### Deep Learning Model
+For deep learning model, I used TextCNN as the primary model. In the area of text classification, RNN has its natural advantage because human text has the sequential and consistent feature. However, Yoon Kim (2014) proposed that CNN can also be used in the text classification. The following graph demostrates the structure of the CNN model:       
+
+[![F3W8sI.jpg](https://s1.ax1x.com/2018/12/08/F3W8sI.jpg)](https://imgchr.com/i/F3W8sI)
+
+Suppose we have a sentence waiting to be classified, and the sentence is made up with multiple $n$-dimensional word vectors. Suppose the length of the sentence is $m$, which implies that the input is a $m*n$ matrix. For this sentiment analysis task, we conduct a convolution on input matrix. For text data, instead of horizontally sliding our filter, we only move our filter vertically, which is similar with N-Gram extracting the local correlations between word and word.       
+
+
+The following is my actual CRNN model. 
+![22](https://s1.ax1x.com/2018/12/08/F3WFz9.png)
 
 ## Statistics
 
 ## References
-
+Kim, Yoon. "Convolutional neural networks for sentence classification." *arXiv preprint arXiv:1408.5882 (2014)*.   
+Zhang, Ye, and Byron Wallace. "A sensitivity analysis of (and practitioners' guide to) convolutional neural networks for sentence classification." *arXiv preprint arXiv:1510.03820 (2015)*.    
+Ma, Xuezhe, and Eduard Hovy. "End-to-end sequence labeling via bi-directional lstm-cnns-crf." *arXiv preprint arXiv:1603.01354 (2016)*.    
 
