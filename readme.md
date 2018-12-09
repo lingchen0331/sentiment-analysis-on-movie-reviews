@@ -68,12 +68,12 @@ xxx
 ### Deep Learning Model
 For deep learning model, I used TextCNN as the primary model. In the area of text classification, RNN has its natural advantage because the human text has a sequential and consistent feature. However, Yoon Kim (2014) proposed that CNN can also be used in the text classification. The following graph demonstrates the structure of the CNN model:       
 
-<div style="text-align: center; width: 75%">![F3W8sI.jpg](https://s1.ax1x.com/2018/12/08/F3W8sI.jpg)</div>
+![F3W8sI.jpg](https://s1.ax1x.com/2018/12/08/F3W8sI.jpg)
 
 Suppose we have a sentence waiting to be classified, and the sentence is made up with multiple $n$-dimensional word vectors. Suppose the length of the sentence is m, which implies that the input is a m by n matrix. For this sentiment analysis task, we conduct a convolution on an input matrix. For text data, instead of horizontally sliding our filter, we only move our filter vertically, which is similar to N-Gram extracting the local correlations between word and word. I have used three strides (3, 4, 5), and we have two filters for each stride. Finally, we can get 6 vectors after the convolution process. We apply max-pooling for each vector and concatenate them into a final vector.    
 
 After getting the feature vector from the Text-CNN model, we add a RNN model in order to better capture the sequential features of the human text. We have tried different RNN models, including traditional RNN, Recurrent Neural Network(GRU) and Long Short-term Memory(LSTM), and we finally chose GRU because it has less parameters and training cost. The following is the final CRNN model.   
-<div style="text-align: center; width: 75%">![22](https://s1.ax1x.com/2018/12/08/F3WFz9.png)</div>
+![22](https://s1.ax1x.com/2018/12/08/F3WFz9.png)
 
 ## Statistics
 
