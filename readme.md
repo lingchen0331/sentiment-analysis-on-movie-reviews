@@ -13,7 +13,7 @@ The first part of the project is data-preprocessing. Since the original dataset 
 
 > Tokenization & Segmentation  
 Noise Removal (Remove stop words)   
-Lemmaziation & Normalization
+Lemmatization & Normalization
 
 Besides, for the purpose of contrasting with traditional NLP classification methods, it is also essential to vectorize phrases (TF-IDF, Word Embedding) in order to learn the correlation between texts rather than treating words as discrete symbols like the *bag of words* model.   
 
@@ -32,6 +32,13 @@ Since there is no existing package to effectively remove stop words from a sente
 The lower case 'a' can be removed because it's trivial in sentiment analysis, but the upper case 'A' is really important in our sentiment analysis task. Besides, the encoding format of characters in movie reviews is inconsistent. It's often to see ‘ instead of ' in the data sample. 
 
 Therefore, we designed multiple regular expressions to extract useful information and effectively remove irrelevant stop words.  
+
+#### Stemming & Normalization
+In English text processing, te goal of both stemming is to reduce inflectional forms and sometimes derivationally related forms of a word to a common base form. In our data sample, there're different variations of words and expressions, like 'movies', 'movie' and 'film' have the same meaning - 'movie', but machine may treat them separately. Thus, it is significant to effectively map related words to the same stem, even if this stem is not in itself a valid root. 
+
+In this task, we used [The Porter Stemming Algorithm](https://tartarus.org/martin/PorterStemmer/) as the basic way of stemming. We take a sentence from our movie reviews as an example:       
+> Original Text: 'This guy was treated improperly in the movie '  
+> Analysis Result: 'Thi guy wa treat improperli in the movi '
 
 #### Feature Selection
 Feature selection plays a really important role in machine learning and natural language processing, which serves two main purposes. First, it makes training and applying a classifier more efficient by decreasing the size of the effective vocabulary. Secondly, feature selection often increases classification accuracy by eliminating noise features. In this task, we have tried three feature extraction methods: *bag of words*, *TF-IDF* and *Word Embedding*. We will introduce these three methods here briefly.  
@@ -61,12 +68,12 @@ xxx
 ### Deep Learning Model
 For deep learning model, I used TextCNN as the primary model. In the area of text classification, RNN has its natural advantage because the human text has a sequential and consistent feature. However, Yoon Kim (2014) proposed that CNN can also be used in the text classification. The following graph demonstrates the structure of the CNN model:       
 
-[![F3W8sI.jpg](https://s1.ax1x.com/2018/12/08/F3W8sI.jpg)](https://imgchr.com/i/F3W8sI)
+<div style="text-align: center; width: 75%">![F3W8sI.jpg](https://s1.ax1x.com/2018/12/08/F3W8sI.jpg)</div>
 
-Suppose we have a sentence waiting to be classified, and the sentence is made up with multiple $n$-dimensional word vectors. Suppose the length of the sentence is $m$, which implies that the input is a $m*n$ matrix. For this sentiment analysis task, we conduct a convolution on an input matrix. For text data, instead of horizontally sliding our filter, we only move our filter vertically, which is similar to N-Gram extracting the local correlations between word and word. I have used three strides (3, 4, 5), and we have two filters for each stride. Finally, we can get 6 vectors after the convolution process. We apply max-pooling for each vector and concatenate them into a final vector.    
+Suppose we have a sentence waiting to be classified, and the sentence is made up with multiple $n$-dimensional word vectors. Suppose the length of the sentence is m, which implies that the input is a m by n matrix. For this sentiment analysis task, we conduct a convolution on an input matrix. For text data, instead of horizontally sliding our filter, we only move our filter vertically, which is similar to N-Gram extracting the local correlations between word and word. I have used three strides (3, 4, 5), and we have two filters for each stride. Finally, we can get 6 vectors after the convolution process. We apply max-pooling for each vector and concatenate them into a final vector.    
 
 After getting the feature vector from the Text-CNN model, we add a RNN model in order to better capture the sequential features of the human text. We have tried different RNN models, including traditional RNN, Recurrent Neural Network(GRU) and Long Short-term Memory(LSTM), and we finally chose GRU because it has less parameters and training cost. The following is the final CRNN model.   
-![22](https://s1.ax1x.com/2018/12/08/F3WFz9.png)
+<div style="text-align: center; width: 75%">![22](https://s1.ax1x.com/2018/12/08/F3WFz9.png)</div>
 
 ## Statistics
 

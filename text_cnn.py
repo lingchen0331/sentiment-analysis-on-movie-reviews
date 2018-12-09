@@ -109,12 +109,7 @@ model.compile(loss='categorical_crossentropy',
 
 print("Fitting data to model...")
 
-save_best = ModelCheckpoint('best.weights',
-                            monitor='val_loss',
-                            verbose=2,
-                            save_best_only=True)
-
-early_stopping = EarlyStopping(monitor='val_loss',
+early_stopping = EarlyStopping(monitor='val_acc',
                                patience=2,
                                verbose=2,
                                mode='auto')
@@ -123,6 +118,6 @@ model.fit(x_train_padded_seqs, y_train,
           batch_size=BATCH_SIZE,
           epochs=NUM_EPOCH,
           validation_data=(x_test_padded_seqs, y_test),
-          callbacks=[save_best, early_stopping])
+          callbacks=[early_stopping])
 
 score, acc = model.evaluate(x_test_padded_seqs, y_test, batch_size=BATCH_SIZE)
