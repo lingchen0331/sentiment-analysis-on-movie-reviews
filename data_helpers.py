@@ -121,8 +121,10 @@ def load_word_embedding(model_DIR, TEXT, MAX_NUM_WORDS):
         embeddings_index[word] = coefs
     f.close()
 
+    print('Found %s word vectors.' % len(embeddings_index))
+
     # take tokens and build word-id dictionary
-    tokenizer = Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=" ", num_words=20000)
+    tokenizer = Tokenizer(filters='"#$%&()*+,-.:;<=>@[\\]^_`{|}~\t\n', split=" ")
     tokenizer.fit_on_texts(TEXT)
     vocab = tokenizer.word_index
 
@@ -133,6 +135,6 @@ def load_word_embedding(model_DIR, TEXT, MAX_NUM_WORDS):
         if embedding_vector is not None:
             embedding_matrix[i] = embedding_vector
 
-    return embedding_matrix
+    return vocab, embedding_matrix
 
 

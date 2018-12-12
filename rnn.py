@@ -62,18 +62,16 @@ model = Sequential()
 
 model.add(Embedding(len(vocab)+1, 256, input_length=20))
 
-model.add(LSTM(
-        256, 
-        dropout=0.2, 
-        recurrent_dropout=0.1, 
-        return_sequences=True))
+model.add(LSTM(256,
+               dropout=0.2,
+               recurrent_dropout=0.1,
+               return_sequences=True))
 
-model.add(LSTM(
-        256, 
-        dropout=0.2, 
-        recurrent_dropout=0.1))
+model.add(LSTM(256,
+               dropout=0.2,
+               recurrent_dropout=0.1))
 
-# Add asoftmax activation function
+# Add a softmax activation function
 model.add(Dense(num_labels, activation='softmax'))
 
 plot_model(model, to_file='model/rnn.png')

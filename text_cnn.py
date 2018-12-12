@@ -4,6 +4,7 @@
 
 __author__ = 'ChenLing'
 
+import matplotlib.pyplot as plt
 import data_helpers as dh
 import numpy as np
 
@@ -13,7 +14,7 @@ total_data = dh.load_json('data/Total.json')
 
 # Parameters
 MAX_NUM_WORDS = 20000
-MAX_SEQUENCE_LENGTH = 200
+MAX_SEQUENCE_LENGTH = 300
 EMBEDDING_DIM = 300
 BATCH_SIZE = 32
 NUM_EPOCH = 12
@@ -33,10 +34,11 @@ from keras.layers import LSTM, GRU, TimeDistributed, Bidirectional
 from keras.layers.merge import concatenate
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.initializers import Constant
+from keras.utils.conv_utils import convert_kernel
 
 from sklearn import preprocessing
 
-# Read training sata and testing data from data/
+# Read training data and testing data from data/
 X_train = train_data['features_content'].astype(str)
 X_test = test_data['features_content'].astype(str)
 y_train = (train_data['labels_index'])
@@ -51,7 +53,7 @@ num_labels = len(labels)
 y_train = to_categorical(y_train.map(lambda x: le.transform([x])[0]), num_labels)
 y_test = to_categorical(y_test.map(lambda x: le.transform([x])[0]), num_labels)
 
-# take tokens and build word-id dictionary     
+# take tokens and build word-id dictionary
 tokenizer = Tokenizer(filters='"#$%&()*+,-.:;<=>@[\\]^_`{|}~\t\n', split=" ")
 tokenizer.fit_on_texts(sentence)
 vocab = tokenizer.word_index
@@ -65,14 +67,14 @@ x_test_padded_seqs = pad_sequences(x_test_word_ids, maxlen=MAX_SEQUENCE_LENGTH)
 print('Preparing embedding matrix...')
 
 # Load word-embedding matrix weight
-embedding_matrix = dh.load_word_embedding('data/glove.6B.300d.txt', sentence, MAX_NUM_WORDS)
+word_index, embedding_matrix = dh.load_word_embedding('data/glove.6B.300d.txt', sentence, MAX_NUM_WORDS)
 
 # load pre-trained word embeddings into an Embedding layer
 # note that we set trainable = False so as to keep the embeddings fixed
-embedding_layer = Embedding(len(vocab) + 1,
+embedding_layer = Embedding(len(word_index) + 1,
                             EMBEDDING_DIM,
-                            embeddings_initializer=Constant(embedding_matrix),
-                            #weights=[embedding_matrix],
+                            #embeddings_initializer=Constant(embedding_matrix),
+                            weights=[embedding_matrix],
                             input_length=MAX_SEQUENCE_LENGTH,
                             trainable=False)
 
@@ -83,11 +85,11 @@ sequence_input = Input(shape=(MAX_SEQUENCE_LENGTH,), dtype='float32')
 embedded_sequences = embedding_layer(sequence_input)
 
 # TextCNN (Sliding window size are 3, 4, 5)
-cnn1 = Convolution1D(256, 3, padding='same', strides = 1, activation='relu')(embedded_sequences)
+cnn1 = Convolution1D(256, 3, padding='same', strides=1, activation='relu')(embedded_sequences)
 cnn1 = MaxPool1D(pool_size=4)(cnn1)
-cnn2 = Convolution1D(256, 4, padding='same', strides = 1, activation='relu')(embedded_sequences)
+cnn2 = Convolution1D(256, 4, padding='same', strides=1, activation='relu')(embedded_sequences)
 cnn2 = MaxPool1D(pool_size=4)(cnn2)
-cnn3 = Convolution1D(256, 5, padding='same', strides = 1, activation='relu')(embedded_sequences)
+cnn3 = Convolution1D(256, 5, padding='same', strides=1, activation='relu')(embedded_sequences)
 cnn3 = MaxPool1D(pool_size=4)(cnn3)
 
 # Concatenate three cnn layers
@@ -97,7 +99,7 @@ gru = Bidirectional(GRU(256, dropout=0.2, recurrent_dropout=0.1))(cnn)
 
 main_output = Dense(num_labels, activation='softmax')(gru)
 
-model = Model(inputs = sequence_input, outputs = main_output)
+model = Model(inputs=sequence_input, outputs=main_output)
 
 plot_model(model, to_file='model/CRNN.png')
 
@@ -114,10 +116,26 @@ early_stopping = EarlyStopping(monitor='val_acc',
                                verbose=2,
                                mode='auto')
 
-model.fit(x_train_padded_seqs, y_train,
-          batch_size=BATCH_SIZE,
-          epochs=NUM_EPOCH,
-          validation_data=(x_test_padded_seqs, y_test),
-          callbacks=[early_stopping])
+history = model.fit(x_train_padded_seqs, y_train,
+                    batch_size=BATCH_SIZE,
+                    epochs=NUM_EPOCH,
+                    validation_data=(x_test_padded_seqs, y_test),
+                    callbacks=[early_stopping])
 
 score, acc = model.evaluate(x_test_padded_seqs, y_test, batch_size=BATCH_SIZE)
+
+# plot the accuracy graph
+plt.subplot(211)
+plt.title("Accuracy")
+plt.plot(history.history["acc"], color="g", label="Train")
+plt.plot(history.history["val_acc"], color="b", label="Test")
+plt.legend(loc="best")
+
+# plot the loss graph
+plt.subplot(212)
+plt.title("Loss")
+plt.plot(history.history["loss"], color="g", label="Train")
+plt.plot(history.history["val_loss"], color="b", label="Test")
+plt.legend(loc="best")
+
+plt.savefig('performance.png')
